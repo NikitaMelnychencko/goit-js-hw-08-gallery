@@ -26,8 +26,7 @@ const cardsImag = createImag(galleryItems);
 
 galleryCollection.insertAdjacentHTML('beforeend', cardsImag);
 
-function createImag(galleryItems) {
-  
+function createImag(galleryItems) { 
   return galleryItems
     .map(({ preview, original, description }) =>
       `<li class="gallery__item">
@@ -47,28 +46,87 @@ function createImag(galleryItems) {
     ).join("");
 
 }
+const arrLink = galleryCollection.querySelectorAll('.gallery__link')
+let arr = {
+  value: 0,
+  min: 1,
+  max: 8,
+  increment() {
+    if (this.value < this.max) {
+    this.value += 1;  
+    }
+  },
+  decrement()
+   {
+    if(this.value > this.min)
+    this.value -= 1;
+  }
 
+}
 galleryCollection.addEventListener('click', evt => {
+  evt.preventDefault();
   if (evt.target.nodeName !== 'IMG') {
     return
   }
-  galleryModalWindow.classList.add('is-open')
-  evt.preventDefault();//отмена перехода по link
-  const linkCurrent = evt.target.dataset.source
-  const altCurrent = evt.target.alt
-  removeSrcImg.src = `${linkCurrent}`
-  removeSrcImg.alt = `${altCurrent}`
+  modalOpen('is-open')
+  renderImg(evt)
+  window.addEventListener('keydown', e => {
+  if (e.code==='Escape') {
+  modalClose('is-open') 
+  }
   
-  
+  if (e.code === 'ArrowRight') {
+    arr.increment()    
+  }
+  console.log(arr);
+  if (e.code==='ArrowLeft') {
+   arr.decrement() 
+  }
+  })
 })
+
 btnLink.addEventListener('click', evt => {
-  galleryModalWindow.classList.remove('is-open')
-  removeSrcImg.src = ''
-  removeSrcImg.alt = ''
+  window.removeEventListener('keydown', e=>{})
+  modalClose('is-open')
+  
 })
 
 overlayLink.addEventListener('click', evt => {
-  if (evt.currentTarget===evt.target) {
-   galleryModalWindow.classList.remove('is-open')
- }
+  if (evt.currentTarget === evt.target) {
+    window.removeEventListener('keydown', e=>{})
+    modalClose('is-open')
+  }
 })
+
+
+// function onEscKeyPress(evt) {
+//   console.log(evt);
+//   if (evt.code==='Escape') {
+//   modalClose('is-open') 
+//   }
+  
+//   if (evt.code === 'ArrowRight') {
+//     arr.increment()    
+//   }
+//   console.log(arr);
+//   if (evt.code==='ArrowLeft') {
+//    arr.decrement() 
+//   }
+// }
+
+function modalOpen(value) {
+  galleryModalWindow.classList.add(value)
+}
+function renderImg(refs) {
+  const linkCurrent = refs.target.dataset.source
+  const altCurrent = refs.target.alt
+
+  removeSrcImg.src = `${linkCurrent}`
+  removeSrcImg.alt = `${altCurrent}`
+}
+function modalClose(value) {
+  galleryModalWindow.classList.remove(value)
+  removeSrcImg.src = ''
+  removeSrcImg.alt = ''
+
+}
