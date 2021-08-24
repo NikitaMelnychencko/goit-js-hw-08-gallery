@@ -46,22 +46,20 @@ function createImag(galleryItems) {
     ).join("");
 
 }
-const arrLink = galleryCollection.querySelectorAll('.gallery__link')
+const arrLink = galleryCollection.querySelectorAll('.gallery__image')
 let arr = {
   value: 0,
   min: 1,
   max: 8,
   increment() {
     if (this.value < this.max) {
-    this.value += 1;  
+      this.value += 1;
     }
   },
-  decrement()
-   {
-    if(this.value > this.min)
-    this.value -= 1;
+  decrement() {
+    if (this.value > this.min)
+      this.value -= 1;
   }
-
 }
 galleryCollection.addEventListener('click', evt => {
   evt.preventDefault();
@@ -69,57 +67,59 @@ galleryCollection.addEventListener('click', evt => {
     return
   }
   modalOpen('is-open')
-  renderImg(evt)
-  window.addEventListener('keydown', e => {
-  if (e.code==='Escape') {
-  modalClose('is-open') 
-  }
+  renderImgFirst(evt)
+  window.addEventListener('keydown', onEscKeyPress)
   
-  if (e.code === 'ArrowRight') {
-    arr.increment()    
-  }
-  console.log(arr);
-  if (e.code==='ArrowLeft') {
-   arr.decrement() 
-  }
-  })
+  const valueIndex = arrLink.forEach((currentValue, index, array) => {
+    if (evt.target.alt === currentValue.alt) {
+      arr.value=index
+  }})
+
 })
 
 btnLink.addEventListener('click', evt => {
-  window.removeEventListener('keydown', e=>{})
+  window.removeEventListener('keydown', onEscKeyPress)
   modalClose('is-open')
   
 })
 
 overlayLink.addEventListener('click', evt => {
   if (evt.currentTarget === evt.target) {
-    window.removeEventListener('keydown', e=>{})
+    window.removeEventListener('keydown', onEscKeyPress)
     modalClose('is-open')
   }
 })
 
 
-// function onEscKeyPress(evt) {
-//   console.log(evt);
-//   if (evt.code==='Escape') {
-//   modalClose('is-open') 
-//   }
+function onEscKeyPress(evt) {
+  if (evt.code==='Escape') {
+  modalClose('is-open') 
+  }
   
-//   if (evt.code === 'ArrowRight') {
-//     arr.increment()    
-//   }
-//   console.log(arr);
-//   if (evt.code==='ArrowLeft') {
-//    arr.decrement() 
-//   }
-// }
+  if (evt.code === 'ArrowRight') {
+    arr.increment()
+    console.log(arrLink[arr.value]);
+    renderImgSecond(arrLink[arr.value])
+  }
+  if (evt.code==='ArrowLeft') {
+    arr.decrement()
+    renderImgSecond(arrLink[arr.value])
+  }
+}
 
 function modalOpen(value) {
   galleryModalWindow.classList.add(value)
 }
-function renderImg(refs) {
+function renderImgFirst(refs) {
   const linkCurrent = refs.target.dataset.source
   const altCurrent = refs.target.alt
+
+  removeSrcImg.src = `${linkCurrent}`
+  removeSrcImg.alt = `${altCurrent}`
+}
+function renderImgSecond(refs) {
+  const linkCurrent = refs.dataset.source
+  const altCurrent = refs.alt
 
   removeSrcImg.src = `${linkCurrent}`
   removeSrcImg.alt = `${altCurrent}`
