@@ -98,7 +98,6 @@ function onEscKeyPress(evt) {
   
   if (evt.code === 'ArrowRight') {
     arr.increment()
-    console.log(arrLink[arr.value]);
     renderImgSecond(arrLink[arr.value])
   }
   if (evt.code==='ArrowLeft') {
