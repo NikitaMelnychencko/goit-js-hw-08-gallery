@@ -112,20 +112,19 @@ function modalOpen(value) {
 function renderImgFirst(refs) {
   const linkCurrent = refs.target.dataset.source
   const altCurrent = refs.target.alt
-
-  removeSrcImg.src = `${linkCurrent}`
-  removeSrcImg.alt = `${altCurrent}`
+  renameValue(`${linkCurrent}`, `${altCurrent}`)
 }
 function renderImgSecond(refs) {
   const linkCurrent = refs.dataset.source
   const altCurrent = refs.alt
-
-  removeSrcImg.src = `${linkCurrent}`
-  removeSrcImg.alt = `${altCurrent}`
+  renameValue(`${linkCurrent}`, `${altCurrent}`)
 }
 function modalClose(value) {
   galleryModalWindow.classList.remove(value)
-  removeSrcImg.src = ''
-  removeSrcImg.alt = ''
-
+  renameValue('', '')
 }
+function renameValue(linkCurrent, altCurrent) {
+  removeSrcImg.src = linkCurrent
+  removeSrcImg.alt = altCurrent
+}
+
